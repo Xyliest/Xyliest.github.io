@@ -9,17 +9,12 @@
 	</head>
 	<body>
 	<div class="contents">
-		<div class="navbar">
-			<a class="active" href="index.html">Home</a>
-			<div class="dropdown">
-				<button class="dropbtn">Puzzles
-					<i class="fa fa-caret-down"></i>
-				</button>
-				<div class="dropdown-content">
-					<a href="NxN.html">N×N</a>
-				</div>
-			</div>
-		</div>
+		<div id="nav"></div>
+		<script>
+			$.get("navbar.html", function(data){
+				$("#nav").replaceWith(data);
+			});
+		</script>
 		<h1 class="centered" style="font-family:FSMeLight;">3×3</h1>
 		<div class="content-divS sticky">
 			<div class="categoriesRS">
