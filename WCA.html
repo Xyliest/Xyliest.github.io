@@ -5,22 +5,17 @@
 		<link rel="shortcut icon" href="icon.ico" type="image/x-icon">
 		<link rel="stylesheet" href="main.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 		<script src="main.js"></script>
 	</head>
 	<body>
 	<div class="contents">
-		<div class="navbar">
-			<a class="active" href="index.html">Home</a>
-			<div class="dropdown">
-				<button class="dropbtn">Puzzles
-					<i class="fa fa-caret-down"></i>
-				</button>
-				<div class="dropdown-content">
-					<a href="NxN.html">N×N</a>
-				</div>
-			</div>
-			<!--<a href="#beginner">Beginner</a>-->
-		</div>
+		<div id="nav"></div>
+		<script>
+			$.get("navbar.html", function(data){
+    				$("#nav").replaceWith(data);
+			});
+		</script>
 		<h1 class="centered" style="font-family:FSMeLight;">WCA puzzles</h1>
 		<div class="content-divS sticky">
 			<div class="categoriesRS">
