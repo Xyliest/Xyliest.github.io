@@ -165,3 +165,21 @@ body{
 p{
 	display: inline;
 }
+
+.disabled svg{
+	transition: 0.5s;
+}
+
+.disabled:hover svg{
+	filter: grayscale(60%) brightness(0.75);
+	transition: 0.5s;
+}
+
+.disabled img{
+	transition: 0.5s;
+}
+
+.disabled:hover img{
+	filter: grayscale(60%) brightness(0.75);
+	transition: 0.5s;
+}
