@@ -166,8 +166,12 @@ p{
 	display: inline;
 }
 
+.disabled{
+	cursor: not-allowed;
+}
+
 .disabled svg{
-	transition: 0.5s;
+	transition: 0.25s;
 }
 
 .disabled:hover svg{
@@ -182,4 +186,8 @@ p{
 .disabled:hover img{
 	filter: grayscale(60%) brightness(0.75);
 	transition: 0.5s;
+}
+
+.disabled:hover div{
+	background-color: #f0f0f0;
 }
