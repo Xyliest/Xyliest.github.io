@@ -149,6 +149,8 @@ body{
 	margin: 0.75vw;
 	width: 10vw;
 	height: 10vw;
+	color: #202020;
+	font-family: FSMeLight;
 	vertical-align:middle;
   justify-content: center;
   align-items: center;
@@ -159,6 +161,7 @@ body{
 .categoriesCS:hover, .categoriesC:hover{
 	border: 1px solid black;
 	border-radius: 10px;
+	box-shadow: 5px 5px #202020;
 	text-decoration: underline;
 	transition: 0.5s;
 }
