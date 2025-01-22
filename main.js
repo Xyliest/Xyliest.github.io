@@ -6,7 +6,7 @@ window.onload=function(){
 }
 
 function get_error(div){
-	div.className+=" disabled";
+	div.parentElement.className+="disabled";
 	div.addEventListener("click",function(event){event.preventDefault()},false);
 }
 	
