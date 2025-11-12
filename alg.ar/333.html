@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>3×3</title>
+		<link rel="shortcut icon" href="icon.ico" type="image/x-icon">
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="main.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+		<script src="main.js"></script>
+	</head>
+	<body>
+	<div class="contents">
+		<div id="nav"></div>
+		<script>
+			$.get("navbar.html", function(data){
+				$("#nav").replaceWith(data);
+			});
+		</script>
+		<h1 class="centered" style="font-family:FSMeLight;">3×3</h1>
+		<div class="content-divS sticky">
+			<div class="categoriesRS">
+			<h3 style="font-family:FSMeLight;">Methods</h3>
+				<a href="beginner.html"><div class="categoriesCS middled">
+					<img src="img/svg-3d/beginner.svg" onload="adjust(this,1)" style="visibility:hidden;" width="100" height="100"><br>
+<p>Beginner</p>
+				</div></a>
+				<a href="CFOP.html"><div class="categoriesCS middled">
+					<img src="img/svg-3d/CFOP.svg" onload="adjust(this,1)" style="visibility:hidden;" width="100" height="100"><br>
+<p>CFOP</p>
+				</div></a>
+				<a href="roux.html"><div class="categoriesCS middled">
+					<img src="img/svg-3d/roux.svg" onload="adjust(this,1)" style="visibility:hidden;" width="100" height="100"><br>
+<p>Roux</p>
+				</div></a>
+				<a href="ZZ.html"><div class="categoriesCS middled">
+					<img src="img/svg-3d/ZZ.svg" onload="adjust(this,1)" style="visibility:hidden;" width="100" height="100"><br>
+<p>ZZ</p>
+				</div></a>
+			</div>
+		</div>
+	</div>
+	</body>
+</html>
