@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Algorithm Translator</title>
+	<script src="svg.js"></script>
+	<script src="visualcube-1.0.13\dist\bundle\srVisualizer.min.js"></script>
+	<style type="text/css">
+		/*body {background-color:rgb(25,25,25);}*/
+		table { border-collapse: collapse; font-family: Calibri, sans-serif; }
+		td { border: solid thin; text-align: center; padding: 0.25vw; }
+		td.mainContent{
+			border: none;
+			text-align: left;
+			vertical-align: top;
+		}
+		.FBF{
+			border: 1px solid black;
+			padding: 5px;
+		}
+	</style><script type="text/javascript">
+		x={R:"R",L:"L",F:"U",U:"B",B:"D",D:"F",r:"r",l:"l",f:"u",u:"b",b:"d",d:"f",M:"M",S:"E'",E:"S",x:"x",y:"z'",z:"y"};
+		y={U:"U",D:"D",F:"L",L:"B",B:"R",R:"F",u:"u",d:"d",f:"l",l:"b",b:"r",r:"f",M:"S'",S:"M",E:"E",x:"z",y:"y",z:"x'"};
+		z={F:"F",B:"B",U:"R",R:"D",D:"L",L:"U",f:"f",b:"b",u:"r",r:"d",d:"l",l:"u",M:"E'",S:"S",E:"M",x:"y'",y:"x",z:"z"};
+		PossibleMoves=["R","U","F","L","D","B","r","u","f","l","d","b","M","S","E"];
+		WideMoves=["r","u","f","l","d","b","M","S","E"];
+		replaceWide1={r:"L x",l:"R x'",f:"B z",u:"D y",b:"F z'",d:"U y'",M:"R L' x'",S:"F' B z",E:"U D' y'"}; // Move count optimizer
+		replaceWide2={r:"L x",l:"R x'",f:"B z",u:"D y",b:"F z'",d:"U y'",M:"L' R x'",S:"B F' z",E:"D' U y'"}; // Move count optimizer
+		WideRot={r:"x",l:"x'",f:"z",u:"y",b:"z'",d:"y'",M:"x'",S:"z",E:"y'"};
+		OppositeLayers={R:"L",U:"D",F:"B",L:"R",D:"U",B:"F"};
+		cubeWidth=256;
+		cubeHeight=256;
+		movesTe=[];
+
+		document.addEventListener("DOMContentLoaded",function(event) {
+			rots=document.querySelectorAll(".rots");
+  			SRVisualizer=window['sr-visualizer'];
+  			normalCube=document.getElementById("normalCube");
+  			inverseCube=document.getElementById("inverseCube");
+  			customRotationCube=document.getElementById("customRotationCube");
+  			FMCCube=document.getElementById("FMCCube");
+  			FMCInverse=document.getElementById("FMCInverse");
+  			document.getElementById("checkFMC").checked="";
+			combinedFBF=document.querySelector("#combinedFBF");
+			document.querySelector("#FBF0").children[1].value="white";
+			document.querySelector("#FBF0").children[4].value="green";
+			document.querySelector("#FBF0").children[7].value="";
+			main();
+			/*customRotationCube.innerHTML="Custom Rotation: <br>";
+			SRVisualizer.cubePNG(customRotationCube,{algorithm:"x2"});*/
+		});
+
+		function main() {
+  			normalAlg=document.querySelector("#alg").value.split(' ').clean('').join(' ');
+  			alg=normalAlg;
+  			//customRotation=document.querySelector("#customRotIn").value.split(' ').clean('').join(' ');
+			if(alg.split(" ").clean("").length!=0) {
+			moves=alg.split(" ");
+			movesI=moves.slice();
+
+			for(i=0;i<movesI.length;i++) {
+				if(movesI[i].length==1) {
+					movesI[i]=movesI[i]+"'";
+				}else if(movesI[i].indexOf("2")==-1) movesI[i]=movesI[i].slice(0,1);
+			}
+			inverseAlg=movesI.reverse().join(" ");
+			document.getElementById("inverse").innerHTML="Inverse: "+inverseAlg;
+			document.getElementById("count").innerHTML="Move count: "+countMoves(normalAlg);
+
+			normalCube.innerHTML="Normal Scramble: <br>";
+			SRVisualizer.cubePNG(normalCube,{algorithm:"x2 "+alg,width:cubeWidth,height:cubeHeight});
+			inverseCube.innerHTML="Inverse Scramble: <br>";
+			SRVisualizer.cubePNG(inverseCube,{algorithm:"x2 "+inverseAlg,width:cubeWidth,height:cubeHeight});
+
+			rots[0].innerHTML="x: "+rotation(alg,["x"],[""]);
+			rots[1].innerHTML="x': "+rotation(alg,["x"],["'"]);
+			rots[2].innerHTML="x2: "+rotation(alg,["x"],["2"]);
+			rots[3].innerHTML="y: "+rotation(alg,["y"],[""]);
+			rots[4].innerHTML="y': "+rotation(alg,["y"],["'"]);
+			rots[5].innerHTML="y2: "+rotation(alg,["y"],["2"]);
+			rots[6].innerHTML="z: "+rotation(alg,["z"],[""]);
+			rots[7].innerHTML="z': "+rotation(alg,["z"],["'"]);
+			rots[8].innerHTML="z2: "+rotation(alg,["z"],["2"]);
+
+			//algRotated=customRot(normalAlg,customRotation);
+			//document.getElementById("customRotOut").innerHTML=algRotated;
+			//customRotationCube.innerHTML="Custom Rotation: <br>";
+			//SRVisualizer.cubePNG(customRotationCube,{algorithm:"x2 "+algRotated,width:cubeWidth,height:cubeHeight});
+
+			FMCalg=FMC(normalAlg);
+			document.querySelector("#algFMC").innerHTML="Algorithm for FMC (W/O rotations, wide and slice moves): "+FMCalg;
+			document.querySelector("#FMCcount").innerHTML="FMC move count: "+countMoves(FMCalg);
+			FMCInv=inverse(FMCalg);
+			document.querySelector("#invFMC").innerHTML="FMC algorithm inverse: "+FMCInv;
+
+			FMCCube.innerHTML="FMC Scramble: <br>";
+			SRVisualizer.cubePNG(FMCCube,{algorithm:"x2 "+FMCalg,width:cubeWidth,height:cubeHeight});
+			FMCInverse.innerHTML="FMC Inverse: <br>";
+			SRVisualizer.cubePNG(FMCInverse,{algorithm:"x2 "+FMCInv,width:cubeWidth,height:cubeHeight});
+			}
+		}
+
+		function _x(alg) {
+			rot=alg.split(" ");
+			rot.forEach(function(m,i){rot[i]=rot[i].replace(m.slice(0,1),x[m.slice(0,1)])});
+			rot.forEach(function(m,i){rot[i]=rot[i].indexOf("''")!=-1?rot[i].slice(0,1):rot[i].indexOf("'2")!=-1?rot[i].slice(0,1)+"2":rot[i]});
+			return rot.join(" ");
+		}
+
+		function _y(alg) {
+			rot=alg.split(" ");
+			rot.forEach(function(m,i){rot[i]=rot[i].replace(m.slice(0,1),y[m.slice(0,1)])});
+			rot.forEach(function(m,i){rot[i]=rot[i].indexOf("''")!=-1?rot[i].slice(0,1):rot[i].indexOf("'2")!=-1?rot[i].slice(0,1)+"2":rot[i]});
+			return rot.join(" ");
+		}
+
+		function _z(alg) {
+			rot=alg.split(" ");
+			rot.forEach(function(m,i){rot[i]=rot[i].replace(m.slice(0,1),z[m.slice(0,1)])});
+			rot.forEach(function(m,i){rot[i]=rot[i].indexOf("''")!=-1?rot[i].slice(0,1):rot[i].indexOf("'2")!=-1?rot[i].slice(0,1)+"2":rot[i]});
+			return rot.join(" ");
+		}
+
+		function rotation(alg,rot,t) {
+			rotated=alg;
+			times=t.slice();
+			t.forEach(function(m,i){times[i]=times[i]==""?1:times[i]=="'"?3:2});
+			for(j=0;j<rot.length;j++) {
+				for(k=0;k<times[j];k++) {
+					rotated=eval("_"+rot[j])(rotated);
+				}
+			}
+			return rotated;
+		}
+
+		function customRot(alg,_rot) {
+			rot=_rot.split(" ");
+			t=[];
+			for(i=0;i<rot.length;i++) {
+				t[i]=rot[i].slice(1,2);
+				rot[i]=rot[i].slice(0,1);
+			}
+			return _rot==""?alg:rotation(alg,rot,t);
+		}
+
+		function removeRot(alg) {
+			movesFi=[];
+			movesRe=alg.split(" ");
+			while(movesRe.length!=0) {
+				while(movesRe[0].indexOf("x")!=-1||movesRe[0].indexOf("y")!=-1||movesRe[0].indexOf("z")!=-1) {
+					if(containsMoves(movesRe.join(" "))) {
+						movesRe=customRot(movesRe.slice(1).join(" "),inverse(movesRe[0])).split(" ");
+					}else{
+						return movesFi.join(" ");
+					}
+				}
+				movesFi.push(movesRe[0]);
+				movesRe.shift();
+			}
+			return movesFi.join(" ").trim();
+		}
+
+		function inverse(alg) {
+			movesI=alg.split(" ");
+			for(k=0;k<movesI.length;k++) {
+				if(movesI[k].length==1) {
+					movesI[k]=movesI[k]+"'";
+				}else if(movesI[k].indexOf("2")==-1) movesI[k]=movesI[k].slice(0,1);
+			}
+			return movesI.reverse().join(" ").trim();
+		}
+
+		/*function propogate(alg) {
+			way=alg.slice(-1);
+			movesI=alg.slice(0,-1).split(" ");
+			for(k=0;k<movesI.length;k++) {
+				if(way=="'") {
+					movesI[k]=inversemovesI[k];
+				}else if(way=="2") {
+					movesI[k]=movesI[k]+"2";
+				}else{
+					movesI[k]=movesI[k].slice(0,1);
+				}
+			}
+			return movesI.join(" ").trim();
+		}*/
+
+		function propagate(alg) {
+			way=alg.slice(-1);
+			movesI=alg.slice(0,-1).split(" ");
+			for(k=0;k<movesI.length;k++) {
+				if(movesI[k].length==1||(movesI[k].indexOf("'")!=-1&&way=="2")) { // clockwise
+					movesI[k]=movesI[k].slice(0,1)+way;
+				}else if((movesI[k].indexOf("2")!=-1&&way=="2")||movesI[k].indexOf("'")!=-1) { // double & anti-clockwise
+					movesI[k]=movesI[k].slice(0,1);
+				}
+			}
+			return movesI.join(" ").trim();
+		}
+
+		function containsMoves(alg) {
+			return alg.split(" ").map(function(x,i){return PossibleMoves.indexOf(x.slice(0,1))!=-1}).some(function(x){return x});
+		}
+
+		function containsWide(alg) {
+			return alg.split(" ").map(function(x,i){return WideMoves.indexOf(x.slice(0,1))!=-1}).some(function(x){return x});
+		}
+
+		function removeWide(alg,n) {
+			movesFi=[];
+			movesRe=alg.split(" ");
+			while(movesRe.length!=0) {
+				while(movesRe[0]!=undefined&&WideMoves.indexOf(movesRe[0].slice(0,1))!=-1) { // WideMoves.map(function(x){return movesRe[0].indexOf(x)!=-1}).some(function(x){return x})
+					movesFi.push(movesRe[0].indexOf("'")!=-1?propagate(eval("replaceWide"+n)[movesRe[0].slice(0,1)]+"'"):movesRe[0].indexOf("2")!=-1?propagate(eval("replaceWide"+n)[movesRe[0].slice(0,1)]+"2"):eval("replaceWide"+n)[movesRe[0].slice(0,1)]);
+					//if(containsMoves(movesRe.join(" "))) {
+						//movesRe=customRot(movesRe.slice(1).join(" "),WideRot[movesRe[0]]).split(" ");
+						movesRe=movesRe.slice(1);
+						//movesFi.push(movesRe[0]);
+					/*}else{
+						movesRe.shift();
+						return movesFi.join(" ").trim();
+					}*/
+				}
+				movesFi.push(movesRe[0]);
+				movesRe.shift();
+			}
+			return movesFi.join(" ").trim();
+		}
+
+		function combineMoves(a,b) {
+			if((a==b&&a!="2")) { // same
+				return "2";
+			}else if((a=="'"&&b=="2")||(a=="2"&&b=="'")) { // '+2, 2+'
+				return "";
+			}else if((a==""&&b=="2")||(a=="2"&&b=="")) { // #+2, 2+#
+				return "'"
+			}else if((a=="2"&&b=="2")||(a==""&&b=="'")||(a=="'"&&b=="")) { // opposite
+				return "0"
+			}
+		}
+
+		function removeRedundant(alg) {
+			movesFi=[];
+			movesRe=alg.split(" ");
+			while(movesRe.length!=0) {
+				movesFi.unshift(movesRe.shift());
+				if(movesRe[0]!=undefined&&movesRe[0].slice(0,1)==movesFi[0].slice(0,1)) {
+					movesFi[0]=movesFi[0].slice(0,1)+combineMoves(movesRe[0].slice(1),movesFi[0].slice(1));
+					movesRe.shift();
+				}
+			}
+			movesFi.unshift(movesRe.shift());
+			return movesFi.reverse().join(" ").trim();
+		}
+
+		function compareArrayElements(a1,a2) {
+			return a2==undefined?false:a1.map(function(x,i){return x==a2[i]}).some(function(x){return x});
+		}
+
+		function removeRedundancy(alg) {
+			moves=alg.split(" ");
+			algLength=moves.length;
+			for(ii=0;ii<algLength-1;ii++) {
+				if(checkOppositeLayers(moves[ii],moves[ii+1])) {
+					[moves[ii],moves[ii+1]]=[moves[ii+1],moves[ii]];
+					movesTe=removeRedundant(moves.join(" ")).split(" ").filter(function(x){return x.indexOf("0")==-1});
+					if(movesTe.length<algLength) {
+						moves=movesTe;
+						algLength=moves.length;
+						ii=-1;
+					}else{
+						[moves[ii],moves[ii+1]]=[moves[ii+1],moves[ii]];
+					}
+				}
+			}
+			return removeRedundant(moves.join(" "));
+		}
+
+		function checkOppositeLayers(a,b) {
+			return OppositeLayers[a.slice(0,1)]==b.slice(0,1);
+		}
+
+		function FMC(alg) {
+			FMC1=removeRedundant(removeRot(removeWide(alg,1)));
+			FMC2=removeRedundant(removeRot(removeWide(alg,2)));
+			FMCl1=countMoves(FMC1);
+			FMCl2=countMoves(FMC2);
+			return removeRedundancy(FMCl1>FMCl2?FMC2:FMC1);
+		}
+
+		function countMoves(alg) {
+			return alg.split(" ").map(function(x){return PossibleMoves.indexOf(x.slice(0,1))!=-1?1:0}).reduce(function(x,y){return x+y},0);
+		}
+
+		Array.prototype.clean = function(deleteValue) {
+  			for (var i = 0; i < this.length; i++) {
+    			if (this[i] == deleteValue) {         
+      				this.splice(i, 1);
+      				i--;
+    			}
+  			}
+  			return this;
+		};
+
+		function showFMC(check) {
+			if(check) {
+				document.querySelector("#FMC").style.display="block";
+			}else{
+				document.querySelector("#FMC").style.display="none";
+			}
+		}
+
+		function showRot(check) {
+			if(check) {
+				document.querySelector("#Rot").style.display="block";
+			}else{
+				document.querySelector("#Rot").style.display="none";
+			}
+		}
+
+		FBFfront={white:"x'",yellow:"x",green:"",red:"y",blue:"y2",orange:"y'"}
+		ColorArray=["white","green","red","yellow","blue","orange","white","green","red","yellow","blue"];
+		clockwiseFBF=["white","blue","red"];
+
+		function FBFalg(alg,top,front) {
+			return removeRot(RotFromTopFront(top,front)+" "+alg);
+		}
+
+		function RotFromTopFront(top,front) {
+			algFinal=FBFfront[front];
+			ColorArray=["white","green","red","yellow","blue","orange","white","green","red","yellow","blue"];
+			ColorArray=ColorArray.slice(ColorArray.findIndex(function(x){return x==front})).slice(1,6);
+			ColorArray.splice(2,1);
+			if(front=="white") {
+				ColorArray=PutToFront(ColorArray,ColorArray.indexOf("blue"));
+			}else if(front=="yellow") {
+				ColorArray=PutToFront(ColorArray,ColorArray.indexOf("green"));
+			}else{
+				ColorArray=PutToFront(ColorArray,ColorArray.indexOf("white"));
+			}
+			topRot="'";
+			if(clockwiseFBF.indexOf(front)!=-1) {
+				topRot="";
+			}
+			algFinal+=" "+Array(ColorArray.indexOf(top)).fill("z"+topRot).join(" ");
+			return algFinal.trim();
+		}
+
+		function PutToFront(arr,el) {
+			return arr.slice(el).concat(arr.slice(0,el));
+		}
+
+		short={w:"white",y:"yellow",r:"red",g:"green",o:"orange",b:"blue"};
+
+		/*function test(a,b) {
+			testCube=document.querySelector("#testCube");
+			testCube.innerHTML="<p>test: </p>";
+			SRVisualizer.cubePNG(testCube,{algorithm:"x2 "+RotFromTopFront(short[a],short[b]),width:100,height:100});
+		}*/
+
+		function FBF(el) {
+			children=Array.from(el.children);
+			childrenN=children.length;
+			algs=[];
+			children.forEach(function(x,i){algs.push(FBFalg(x.children[7].value,x.children[1].value,x.children[4].value))});
+			combinedFBF.innerHTML=algs.join(" ");
+		}
+
+		function addFBF(el) {
+			document.querySelector("#FaceByFace").insertAdjacentHTML("beforeend",`<div id="FBF`+el.length+`" class="FBF"><label>Top: </label><select class="topColor" onchange="this.style.backgroundColor=this.value=='green'?'limegreen':this.value;" style="background-color:white;"><option value="white" style="background-color:white;" selected>White</option><option value="yellow" style="background-color:yellow;">Yellow</option><option value="green" style="background-color:limegreen;">Green</option><option value="red" style="background-color:red;">Red</option><option value="blue" style="background-color:blue;">Blue</option><option value="orange" style="background-color:orange;">Orange</option></select><br><label>Front: </label><select class="frontColor" onchange="this.style.backgroundColor=this.value=='green'?'limegreen':this.value;" style="background-color:limegreen;"><option value="white" style="background-color:white;">White</option><option value="yellow" style="background-color:yellow;">Yellow</option><option value="green" style="background-color:limegreen;" selected>Green</option><option value="red" style="background-color:red;">Red</option><option value="blue" style="background-color:blue;">Blue</option><option value="orange" style="background-color:orange;">Orange</option></select><br><label>Algorithm: </label><input></div>`);
+		}
+	</script>
+</head>
+<body>
+	<!--div id="testCube"></div-->
+	<input oninput="main()" id="alg" style="width:100%;text-align:center;font-size:25px">
+	<table><tbody><tr><td class="mainContent">
+			<p id="inverse" style="font-size:25px">Inverse: </p>
+			<p id="count" style="font-size:25px">Move count: </p>
+			<table><tbody><tr><td id="normalCube"></td><td id="inverseCube"></td><!--td id="customRotationCube"></td--></tr></tbody></table>
+	FMC section: <input id="checkFMC" type="checkbox" onchange="showFMC(this.checked)">
+	<div id="FMC" style="display:none;">
+		<p id="algFMC">Algorithm for FMC (W/O rotations, wide and slice moves): </p>
+		<p id="invFMC">FMC algorithm inverse: </p>
+		<p id="FMCcount">FMC move count: </p>
+		<table><tbody><tr><td id="FMCCube"></td><td id="FMCInverse"></td></tr></tbody></table>
+	</div>
+	<!--a>Custom Rotation: </a><input oninput="customRot(this.value.split(' ').clean('').join(' '))" id="customRotIn"><p id="customRotOut"></p-->
+	<!--Rotations section: <input id="checkRotation" type="checkbox" onchange="showRot(this.checked)">-->
+	<table id="Rot" style="display:none;">
+		<tbody>
+			<tr>
+				<td class="rots">x: </td>
+				<td class="rots">x': </td>
+				<td class="rots">x2: </td>
+			</tr>
+			<tr>
+				<td class="rots">y: </td>
+				<td class="rots">y': </td>
+				<td class="rots">y2: </td>
+			</tr>
+			<tr>
+				<td class="rots">z: </td>
+				<td class="rots">z': </td>
+				<td class="rots">z2: </td>
+			</tr>
+		</tbody>
+	</table>
+		</td>
+		<td class="mainContent">
+			<div id="FaceByFace">
+				<div id="FBF0" class="FBF">
+					<label>Top: </label>
+					<select class="topColor" onchange="this.style.backgroundColor=this.value=='green'?'limegreen':this.value;" style="background-color:white;">
+						<option value="white" style="background-color:white;" selected>White</option>
+						<option value="yellow" style="background-color:yellow;">Yellow</option>
+						<option value="green" style="background-color:limegreen;">Green</option>
+						<option value="red" style="background-color:red;">Red</option>
+						<option value="blue" style="background-color:blue;">Blue</option>
+						<option value="orange" style="background-color:orange;">Orange</option>
+					</select><br>
+					<label>Front: </label>
+					<select class="frontColor" onchange="this.style.backgroundColor=this.value=='green'?'limegreen':this.value;" style="background-color:limegreen;">
+						<option value="white" style="background-color:white;">White</option>
+						<option value="yellow" style="background-color:yellow;">Yellow</option>
+						<option value="green" style="background-color:limegreen;" selected>Green</option>
+						<option value="red" style="background-color:red;">Red</option>
+						<option value="blue" style="background-color:blue;">Blue</option>
+						<option value="orange" style="background-color:orange;">Orange</option>
+					</select><br>
+					<label>Algorithm: </label>
+					<input>
+				</div>
+			</div>
+			<button style="cursor:pointer;" onclick="addFBF(this.parentElement.children[0].children)">+</button><br>
+			<button onclick="FBF(this.parentElement.children[0])">Combine algorithms</button><button onclick="document.querySelector('#alg').value=combinedFBF.innerHTML;main();">Set algorithm</button><br>
+			<label>Combined algorithms: </label>
+			<a id="combinedFBF"></a>
+		</td>
+	</tr></tbody></table>
+</body>
+</html>
