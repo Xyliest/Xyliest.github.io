@@ -249,7 +249,7 @@
 				}
 			}
 			movesFi.unshift(movesRe.shift());
-			return movesFi.reverse().join(" ").trim();
+			return movesFi.reverse().join(" ").trim().split(" ").filter(function(x){return x.indexOf("0")==-1}).join(" ");
 		}
 
 		function compareArrayElements(a1,a2) {
@@ -438,4 +438,5 @@
 		</td>
 	</tr></tbody></table>
 </body>
+
 </html>
