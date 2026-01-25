@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="prism.min.css">
+	<script src="prism.min.js"></script>
+	<script src="prism-javascript.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+	<title>Hashes</title>
+	<style>
+		summary{
+			user-select: none;
+			cursor: pointer;
+		}
+		.tooBig{
+			cursor: not-allowed;
+		}
+	</style>
+</head>
+<body>
+	<h1>Apps Hashes</h1>
+	<p>This is a simple page for those of you who want to check the safety and legitimacy of an app. I created this page for two reasons: 1. I couldn't find hashes of FNaF games online and 2. I know all too well the feeling of sailing the high seas but not wanting to be at risk from the booty. And yes, I know that some of the hashes will probably be out of date when you check them and I'll try to fix them as soon as I can.</p>
+	<p>This page contains all sorts of apps; ranging from games from steam to obscure coding programs (and their download link). The hashes on this page were computed by me using a simple powershell program of apps that I actually have downloaded and/or bought. </p>
+	<details>
+		<summary>How to check the hash of an app (how to compute a hash yourself)</summary>
+		<p>The easiest method is to upload your file to <a href="https://www.virustotal.com/gui/home/upload" target="_blank">VirusTotal</a>. You just have to drag-and-drop or browse your computer for the file, wait for the file analysis and go to the "Details" tab to view the hashes.</p>
+		<p>If VirusTotal fails to analyze your file, whether it be because it's too big or some other reason, you'll need to use the second method, which requires some basic knowledge of PowerShell.</p>
+		<p>For the second method, you first need to paste the following code into a PowerShell window: </p>
+	<pre class="language-javascript" tabindex="0"><code class="language-javascript">Do<span class="token punctuation">{</span>
+	$Path<span class="token operator">=</span>Read<span class="token operator">-</span>Host <span class="token operator">-</span>Prompt <span class="token string">"What's the path to the app?"</span>
+	$Path<span class="token operator">=</span><span class="token punctuation">(</span>$Path<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Trim</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">Trim</span><span class="token punctuation">(</span><span class="token string">'"'</span><span class="token punctuation">)</span>
+	$Name<span class="token operator">=</span>Split<span class="token operator">-</span>Path $Path <span class="token operator">-</span>Leaf
+	$<span class="token constant">MD5</span><span class="token operator">=</span>Get<span class="token operator">-</span>FileHash <span class="token operator">-</span>Path $Path <span class="token operator">-</span>Algorithm <span class="token constant">MD5</span> <span class="token operator">|</span> Select<span class="token operator">-</span>Object <span class="token operator">-</span>ExpandProperty Hash
+	$<span class="token constant">SHA1</span><span class="token operator">=</span>Get<span class="token operator">-</span>FileHash <span class="token operator">-</span>Path $Path <span class="token operator">-</span>Algorithm <span class="token constant">SHA1</span> <span class="token operator">|</span> Select<span class="token operator">-</span>Object <span class="token operator">-</span>ExpandProperty Hash
+	$<span class="token constant">SHA256</span><span class="token operator">=</span>Get<span class="token operator">-</span>FileHash <span class="token operator">-</span>Path $Path <span class="token operator">-</span>Algorithm <span class="token constant">SHA256</span> <span class="token operator">|</span> Select<span class="token operator">-</span>Object <span class="token operator">-</span>ExpandProperty Hash
+	Write<span class="token operator">-</span>Host $Name
+	Write<span class="token operator">-</span>Host <span class="token string">"MD5: $MD5"</span>
+	Write<span class="token operator">-</span>Host <span class="token string">"SHA1: $SHA1"</span>
+	Write<span class="token operator">-</span>Host <span class="token string">"SHA256: $SHA256"</span>
+<span class="token punctuation">}</span>
+<span class="token function">While</span><span class="token punctuation">(</span>$<span class="token boolean">true</span><span class="token punctuation">)</span></code></pre>
+		<p>Then press enter to start the script. Now, you just need to drag-and-drop your file into the window and press enter to get the hashes. (It may take upwards of a minute or two to compute the hashes)</p>
+	</details>
+	<h2>Hash Catalogue: </h2>
+	<pre><a href="https://store.steampowered.com/app/319510/Five_Nights_at_Freddys/" target="_blank">FiveNightsatFreddys.exe</a> <a href="https://www.virustotal.com/gui/file/862CD7AB7C81B20A4E848888BC2493DDA0181759C39958A42CC5C3D02DFB195A/detection" target="_blank">VirusTotal</a>
+MD5: D926FEE3666C1C854A475A9766AD7FF7
+SHA1: 6459DF8E4AE6D8B4DD77273F6337BD77874A8276
+SHA256: 862CD7AB7C81B20A4E848888BC2493DDA0181759C39958A42CC5C3D02DFB195A
+<hr>
+<a href="https://store.steampowered.com/app/332800/Five_Nights_at_Freddys_2/" target="_blank">FiveNightsatFreddys2.exe</a> <a href="https://www.virustotal.com/gui/file/84DB9972C70AE02BA9596E1BE624F2942545EE939611E7FCD593B75A67D41AC6/detection" target="_blank">VirusTotal</a>
+MD5: 799B57586E19C15E5E750677EFBD04D3
+SHA1: 902DDF1C96EED78AA470ACB80713D547A4CA0D75
+SHA256: 84DB9972C70AE02BA9596E1BE624F2942545EE939611E7FCD593B75A67D41AC6
+<hr>
+<a href="https://store.steampowered.com/app/354140/Five_Nights_at_Freddys_3/" target="_blank">FiveNightsatFreddys3.exe</a> <a href="https://www.virustotal.com/gui/file/705EBBDA9704E3B3D0F4BDBAE25F691ABD10713191068D66CA1DF6FEDC5E2260/detection" target="_blank">VirusTotal</a>
+MD5: 6406B6C63B5F944C4AC90310F212A702
+SHA1: C6FEB6407E01BBCF6E684ABC5D5EC931A68C75CE
+SHA256: 705EBBDA9704E3B3D0F4BDBAE25F691ABD10713191068D66CA1DF6FEDC5E2260
+<hr>
+<a href="https://store.steampowered.com/app/388090/Five_Nights_at_Freddys_4/" target="_blank">FiveNightsatFreddys4.exe</a> <a href="https://www.virustotal.com/gui/file/082A7ECD7369DFF1E4BF433B3E8E73EE10FA200AFB6509FBE47F551DD3C9C314/detection" target="_blank">VirusTotal</a>
+MD5: AF8AFCDD53EA30C5C0F09AC3A4555050
+SHA1: 3FE6C8FC55C31FF83D39AFFF1F594B44AFA4C3F7
+SHA256: 082A7ECD7369DFF1E4BF433B3E8E73EE10FA200AFB6509FBE47F551DD3C9C314
+<hr>
+<a href="https://store.steampowered.com/app/388090/Five_Nights_at_Freddys_4/" target="_blank">HalloweenEdition.exe (FNaF 4 Halloween Edition)</a> <a href="https://www.virustotal.com/gui/file/CB31F6CE460BEFF1BB4D1A9AE7F16E346C58A743AF9D01A41A10489E3DF43354/detection" target="_blank">VirusTotal</a>
+MD5: 76C84BCE0312D101571FC517587FBD33
+SHA1: 19F100E7389BF0F2CFCAFB5AFFD9032F45A08463
+SHA256: CB31F6CE460BEFF1BB4D1A9AE7F16E346C58A743AF9D01A41A10489E3DF43354
+<hr>
+<a href="https://store.steampowered.com/app/506610/Five_Nights_at_Freddys_Sister_Location/" target="_blank">SisterLocation.exe (FNaF: Sister Location)</a> <a href="https://www.virustotal.com/gui/file/C60E1C7994316426D824B82004AA5C76E3AAB06D4E78E0C9391628E0D52B2C73/detection" class="tooBig" title="Too big! (>650MB)" onclick="event.preventDefault();">VirusTotal</a>
+MD5: CC2B5B61426C2593CE050EDD44249211
+SHA1: 4A8CE3C74CEF76FD67B3E5CA80EB5BD1B36576CC
+SHA256: C60E1C7994316426D824B82004AA5C76E3AAB06D4E78E0C9391628E0D52B2C73
+<hr>
+<a href="https://store.steampowered.com/app/738060/Freddy_Fazbears_Pizzeria_Simulator/" target="_blank">Pizzeria Simulator.exe (Freddy Fazbear's Pizzeria Simulator</a> <a href="https://www.virustotal.com/gui/file/DA47F0FE356D4A3F15CAB9641D17BEB80D490F26C7741C1ECC3CCC46E9EFBF75/detection" target="_blank">VirusTotal</a>
+MD5: FEC2244C9F687FF7AE5C1EF11F36CA1E
+SHA1: DED78FB69FD52B8B18B77ED0E54722C2BF8FA558
+SHA256: DA47F0FE356D4A3F15CAB9641D17BEB80D490F26C7741C1ECC3CCC46E9EFBF75
+<hr>
+<a href="https://store.steampowered.com/app/871720/Ultimate_Custom_Night/" target="_blank">Ultimate Custom Night.exe</a> <a href="https://www.virustotal.com/gui/file/AA927213F4474B89A3330E87D55AF9064D23703BBBD581A473CD0EE6629BFA16/detection" target="_blank">VirusTotal</a>
+MD5: 8CDAC7EFC631D81387C64833901F5E80
+SHA1: 0100667554757E857B8C65B8A8E0AFAB4F457DBA
+SHA256: AA927213F4474B89A3330E87D55AF9064D23703BBBD581A473CD0EE6629BFA16
+<hr>
+<a href="https://store.steampowered.com/app/431730/Aseprite/" target="_blank">Aseprite.exe</a> <a href="https://www.virustotal.com/gui/file/C5197A70B5D8F150051BE67155FA307E30D9C8A49A6716DA979A0C162D3A41E6/detection" target="_blank">VirusTotal</a>
+MD5: 7C5F01A370B4020BAC7C46FAF1EE6047
+SHA1: D9C713B8C866A53FA308B3BA6BD8C96F2FCD120A
+SHA256: C5197A70B5D8F150051BE67155FA307E30D9C8A49A6716DA979A0C162D3A41E6
+<hr>
+<a href="https://store.steampowered.com/app/1443200/Class_of_09/" target="_blank">Class_Of_09.exe (64-bit version)</a> <a href="https://www.virustotal.com/gui/file/244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93/detection" target="_blank">VirusTotal</a>
+MD5: 3B15530ECDF5C5013A8D7109DBF6A7B1
+SHA1: D6F5B60B9CACA68F3DD9F3508114537BAB293A52
+SHA256: 244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93
+<hr>
+<a href="https://store.steampowered.com/app/1443200/Class_of_09/" target="_blank">Class_Of_09-32.exe (32-bit version)</a> <a href="https://www.virustotal.com/gui/file/F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C/detection" target="_blank">VirusTotal</a>
+MD5: DF290EC9CB022EFCC8C79CF06A4A453F
+SHA1: 163C76424D6F901E31A16E9C69A42C1B3D0B99F6
+SHA256: F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C
+<hr>
+<a href="https://store.steampowered.com/app/2318310/Class_of_09_The_ReUp/" target="_blank">C09RU.exe (Class of '09: The Re-Up 64-bit version)</a> <a href="https://www.virustotal.com/gui/file/244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93/detection" target="_blank">VirusTotal</a>
+MD5: 3B15530ECDF5C5013A8D7109DBF6A7B1
+SHA1: D6F5B60B9CACA68F3DD9F3508114537BAB293A52
+SHA256: 244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93
+<hr>
+<a href="https://store.steampowered.com/app/2318310/Class_of_09_The_ReUp/" target="_blank">C09RU-32.exe (Class of '09: The Re-Up 32-bit version)</a> <a href="https://www.virustotal.com/gui/file/F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C/detection" target="_blank">VirusTotal</a>
+MD5: DF290EC9CB022EFCC8C79CF06A4A453F
+SHA1: 163C76424D6F901E31A16E9C69A42C1B3D0B99F6
+SHA256: F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C
+<hr>
+<a href="https://store.steampowered.com/app/2757330/Class_of_09_The_Flip_Side/" target="_blank">C09FS.exe (Class of '09: The Flip Side 64-bit version)</a> <a href="https://www.virustotal.com/gui/file/244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93/detection" target="_blank">VirusTotal</a>
+MD5: 3B15530ECDF5C5013A8D7109DBF6A7B1
+SHA1: D6F5B60B9CACA68F3DD9F3508114537BAB293A52
+SHA256: 244F5391B6F3FFC701BA75766023421BCD8B0CB1046611993285B6545A099E93
+<hr>
+<a href="https://store.steampowered.com/app/2757330/Class_of_09_The_Flip_Side/" target="_blank">C09FS-32.exe (Class of '09: The Flip Side 32-bit version)</a> <a href="https://www.virustotal.com/gui/file/F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C/detection" target="_blank">VirusTotal</a>
+MD5: DF290EC9CB022EFCC8C79CF06A4A453F
+SHA1: 163C76424D6F901E31A16E9C69A42C1B3D0B99F6
+SHA256: F609F0A066FAD76286C28A35C4EE2E42A6391DEC4FCE4F56EF3215C5F38A2C1C
+<hr>
+<a href="https://store.steampowered.com/app/478960/Clickteam_Fusion_25_Free_Edition/" target="_blank">mmf2u.exe (Clickteam Fusion 2.5 Free Edition)</a> <a href="https://www.virustotal.com/gui/file/A7492E6375289A3BB4DA2914E76B8D088D34CE977491961F82A5A28D98B1D849/detection" target="_blank">VirusTotal</a>
+MD5: 154391C24BFCBF41CB177FAEE6AD9CAE
+SHA1: D07321AA4B1D6443EE9CDFD6AAF4206A06335854
+SHA256: A7492E6375289A3BB4DA2914E76B8D088D34CE977491961F82A5A28D98B1D849
+<hr>
+<a href="https://store.steampowered.com/app/248170/Clickteam_Fusion_25/" target="_blank">mmf2u.exe (Clickteam Fusion 2.5 Standard)</a> <a href="https://www.virustotal.com/gui/file/0276929246A89CC7CCAC5564B72EF4F8AA7041B8FA92A87697A04F6E04B308B5/detection" target="_blank">VirusTotal</a>
+MD5: 7245A77CAA58C155C35C8BA48B8FAD36
+SHA1: 1C6A2122140F42CE812D412963F79EACD221A6B5
+SHA256: 0276929246A89CC7CCAC5564B72EF4F8AA7041B8FA92A87697A04F6E04B308B5
+<hr>
+<a href="https://store.steampowered.com/app/322170/Geometry_Dash/" target="_blank">GeometryDash.exe</a> <a href="https://www.virustotal.com/gui/file/A48650AF2785567749C8E5DEE1433ACF71DDFFFC3F602A8C0E3DBCC817098131/detection" target="_blank">VirusTotal</a>
+MD5: A0CF271BBF8D028B7EE5FBC429FCE92B
+SHA1: 9604147C8A4CAD0DFDA9EF8D1DE2D759E0E0C609
+SHA256: A48650AF2785567749C8E5DEE1433ACF71DDFFFC3F602A8C0E3DBCC817098131
+<hr>
+<a href="https://store.steampowered.com/app/993090/Lossless_Scaling/" target="_blank">LosslessScaling.exe</a> <a href="https://www.virustotal.com/gui/file/CF02E1CAD47E220B6FA24D05689356D70173C86BE10E3E213E8E90E859C3A542/detection" target="_blank">VirusTotal</a>
+MD5: C6D73A7FA5B7ECDF3E6F96A1E838471D
+SHA1: BAAD28289231B7D19AFCDBA89A1535EA653A9903
+SHA256: CF02E1CAD47E220B6FA24D05689356D70173C86BE10E3E213E8E90E859C3A542
+<hr>
+<a href="https://store.steampowered.com/app/1989270/Slay_the_Princess__The_Pristine_Cut/" target="_blank">SlaythePrincess.exe</a> <a href="https://www.virustotal.com/gui/file/8A8CF2C2EAA50070FDE1B614AF9482FC763639A8E8CC965A300AB84C695D9C19/detection" target="_blank">VirusTotal</a>
+MD5: 6F59D061D6904F67FD67947A127CCA20
+SHA1: 90580CE65D170CFDC3E3463E383C14E96C5AE5A1
+SHA256: 8A8CF2C2EAA50070FDE1B614AF9482FC763639A8E8CC965A300AB84C695D9C19
+<hr>
+<a href="https://store.steampowered.com/app/646570/Slay_the_Spire/" target="_blank">SlayTheSpire.exe</a> <a href="https://www.virustotal.com/gui/file/44B8EACFD3843A8666E980DC9C71A50A069EF58610FB134464D1B606434C9603/detection" target="_blank">VirusTotal</a>
+MD5: E9061C7339782046AEE895B677EB55E4
+SHA1: E3FE2C144D74FBD49DCDFB5B43A6F51349847270
+SHA256: 44B8EACFD3843A8666E980DC9C71A50A069EF58610FB134464D1B606434C9603
+<hr>
+<a href="https://store.steampowered.com/app/105600/Terraria/" target="_blank">Terraria.exe</a> <a href="https://www.virustotal.com/gui/file/2E6A66F8EDCFF5A4DB67D5A13C30F28F1C1CE66E567C676C3884206F02909554/detection" target="_blank">VirusTotal</a>
+MD5: 4530E0ACFA4C789F462ADDB77B405CCB
+SHA1: 226B80C404D933069C6043A56640923D16210AE9
+SHA256: 2E6A66F8EDCFF5A4DB67D5A13C30F28F1C1CE66E567C676C3884206F02909554
+<hr>
+<a href="https://store.steampowered.com/app/391540/Undertale/" target="_blank">UNDERTALE.exe</a> <a href="https://www.virustotal.com/gui/file/C8C4191026BF5587A6FAD120855B8B82FFB4FA0C3EAF10515BE472AD84248E58/detection" target="_blank">VirusTotal</a>
+MD5: 8741FE2075CFBB8070FF1CCB7468981A
+SHA1: 9FF96C296CC555A6A000133E07FB3F4AB92811C4
+SHA256: C8C4191026BF5587A6FAD120855B8B82FFB4FA0C3EAF10515BE472AD84248E58
+<hr>
+<a href="https://store.steampowered.com/app/431960/Wallpaper_Engine/" target="_blank">wallpaper64.exe (Wallpaper Engine 64-bit version)</a> <a href="https://www.virustotal.com/gui/file/BCED836B83EAA078D212EB4781E4E7C4FC89AB04F84D6E85AC3C1EE6081C3E42/detection" target="_blank">VirusTotal</a>
+MD5: 5DC10BE1260FDFEA45446699BFCD8B5D
+SHA1: 47EBD48C019A4FF00D0C62EB4BA96666FDC4E654
+SHA256: BCED836B83EAA078D212EB4781E4E7C4FC89AB04F84D6E85AC3C1EE6081C3E42
+<hr>
+<a href="https://store.steampowered.com/app/431960/Wallpaper_Engine/" target="_blank">wallpaper32.exe (Wallpaper Engine 32-bit version)</a> <a href="https://www.virustotal.com/gui/file/937A2420A6002FB2215BD28BC341411A8C8FEB41864CCF84EF59BE61BEE3F63D/detection" target="_blank">VirusTotal</a>
+MD5: B1937B07297A96AF6DCFAF8013349973
+SHA1: FF4B60A109CC47F47BA8A950B74F94D120777ED2
+SHA256: 937A2420A6002FB2215BD28BC341411A8C8FEB41864CCF84EF59BE61BEE3F63D
+<hr><a href="https://store.steampowered.com/app/1712830/Baldis_Basics_Classic_Remastered/" target="_blank">BALDI.exe (Baldi's Basics Classic Remastered)</a> <a href="https://www.virustotal.com/gui/file/775099FB44C598D752AA07A0D3A1D757FA02D5A0A95C522AADA41F905E03B9C8/detection" target="_blank">VirusTotal</a>
+MD5: 4865B5DBF12F4C44B5A5D25F7FFFE2EE
+SHA1: 1BFF10301F7A66F8D603C347EA7EA90B4A3ECB50
+SHA256: 775099FB44C598D752AA07A0D3A1D757FA02D5A0A95C522AADA41F905E03B9C8
+<hr>
+<a href="https://store.steampowered.com/app/698780/Doki_Doki_Literature_Club/" target="_blank">DDLC.exe (Doki Doki Literature Club)</a> <a href="https://www.virustotal.com/gui/file/0F9EC1AEDE2A8397C23801200DF606BF03E400FBD09B32F762C33F37A9137085/detection" target="_blank">VirusTotal</a>
+MD5: DEEDC254FB84F27448CA8637A0E33997
+SHA1: 46FE8A26E7C74E72E40C2A0A70CEC9D74228DF4D
+SHA256: 0F9EC1AEDE2A8397C23801200DF606BF03E400FBD09B32F762C33F37A9137085
+<hr>
+<a href="https://store.steampowered.com/app/1388880/Doki_Doki_Literature_Club_Plus/" target="_blank">Doki Doki Literature Club Plus.exe</a> <a href="https://www.virustotal.com/gui/file/B17B6A1E21E7BEAE66B256DA045C02A5BF624E0C3ED3D7590167EE4D2F3CB7C5/detection" target="_blank">VirusTotal</a>
+MD5: F690919462312D2CA082C41A6A03731B
+SHA1: 0AA14043A1A0D33E3AC3A259CE38237816D05806
+SHA256: B17B6A1E21E7BEAE66B256DA045C02A5BF624E0C3ED3D7590167EE4D2F3CB7C5
+<hr>
+</pre>
+</body>
+</html>
