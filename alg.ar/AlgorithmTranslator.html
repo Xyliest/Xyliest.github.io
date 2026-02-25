@@ -54,48 +54,65 @@
   			alg=normalAlg;
   			//customRotation=document.querySelector("#customRotIn").value.split(' ').clean('').join(' ');
 			if(alg.split(" ").clean("").length!=0) {
-			moves=alg.split(" ");
-			movesI=moves.slice();
+				moves=alg.split(" ");
+				movesI=moves.slice();
 
-			for(i=0;i<movesI.length;i++) {
-				if(movesI[i].length==1) {
-					movesI[i]=movesI[i]+"'";
-				}else if(movesI[i].indexOf("2")==-1) movesI[i]=movesI[i].slice(0,1);
-			}
-			inverseAlg=movesI.reverse().join(" ");
-			document.getElementById("inverse").innerHTML="Inverse: "+inverseAlg;
-			document.getElementById("count").innerHTML="Move count: "+countMoves(normalAlg);
+				for(i=0;i<movesI.length;i++) {
+					if(movesI[i].length==1) {
+						movesI[i]=movesI[i]+"'";
+					}else if(movesI[i].indexOf("2")==-1) movesI[i]=movesI[i].slice(0,1);
+				}
+				inverseAlg=movesI.reverse().join(" ");
+				document.getElementById("inverse").innerHTML="Inverse: "+inverseAlg;
+				document.getElementById("count").innerHTML="Move count: "+countMoves(normalAlg);
 
-			normalCube.innerHTML="Normal Scramble: <br>";
-			SRVisualizer.cubePNG(normalCube,{algorithm:"x2 "+alg,width:cubeWidth,height:cubeHeight});
-			inverseCube.innerHTML="Inverse Scramble: <br>";
-			SRVisualizer.cubePNG(inverseCube,{algorithm:"x2 "+inverseAlg,width:cubeWidth,height:cubeHeight});
+				normalCube.innerHTML="Normal Scramble: <br>";
+				SRVisualizer.cubePNG(normalCube,{algorithm:"x2 "+alg,width:cubeWidth,height:cubeHeight});
+				inverseCube.innerHTML="Inverse Scramble: <br>";
+				SRVisualizer.cubePNG(inverseCube,{algorithm:"x2 "+inverseAlg,width:cubeWidth,height:cubeHeight});
 
-			rots[0].innerHTML="x: "+rotation(alg,["x"],[""]);
-			rots[1].innerHTML="x': "+rotation(alg,["x"],["'"]);
-			rots[2].innerHTML="x2: "+rotation(alg,["x"],["2"]);
-			rots[3].innerHTML="y: "+rotation(alg,["y"],[""]);
-			rots[4].innerHTML="y': "+rotation(alg,["y"],["'"]);
-			rots[5].innerHTML="y2: "+rotation(alg,["y"],["2"]);
-			rots[6].innerHTML="z: "+rotation(alg,["z"],[""]);
-			rots[7].innerHTML="z': "+rotation(alg,["z"],["'"]);
-			rots[8].innerHTML="z2: "+rotation(alg,["z"],["2"]);
+				rots[0].innerHTML="x: "+rotation(alg,["x"],[""]);
+				rots[1].innerHTML="x': "+rotation(alg,["x"],["'"]);
+				rots[2].innerHTML="x2: "+rotation(alg,["x"],["2"]);
+				rots[3].innerHTML="y: "+rotation(alg,["y"],[""]);
+				rots[4].innerHTML="y': "+rotation(alg,["y"],["'"]);
+				rots[5].innerHTML="y2: "+rotation(alg,["y"],["2"]);
+				rots[6].innerHTML="z: "+rotation(alg,["z"],[""]);
+				rots[7].innerHTML="z': "+rotation(alg,["z"],["'"]);
+				rots[8].innerHTML="z2: "+rotation(alg,["z"],["2"]);
 
-			//algRotated=customRot(normalAlg,customRotation);
-			//document.getElementById("customRotOut").innerHTML=algRotated;
-			//customRotationCube.innerHTML="Custom Rotation: <br>";
-			//SRVisualizer.cubePNG(customRotationCube,{algorithm:"x2 "+algRotated,width:cubeWidth,height:cubeHeight});
+				//algRotated=customRot(normalAlg,customRotation);
+				//document.getElementById("customRotOut").innerHTML=algRotated;
+				//customRotationCube.innerHTML="Custom Rotation: <br>";
+				//SRVisualizer.cubePNG(customRotationCube,{algorithm:"x2 "+algRotated,width:cubeWidth,height:cubeHeight});
 
-			FMCalg=FMC(normalAlg);
-			document.querySelector("#algFMC").innerHTML="Algorithm for FMC (W/O rotations, wide and slice moves): "+FMCalg;
-			document.querySelector("#FMCcount").innerHTML="FMC move count: "+countMoves(FMCalg);
-			FMCInv=inverse(FMCalg);
-			document.querySelector("#invFMC").innerHTML="FMC algorithm inverse: "+FMCInv;
+				FMCalg=FMC(normalAlg);
+				document.querySelector("#algFMC").innerHTML="Algorithm for FMC (W/O rotations, wide and slice moves): "+FMCalg;
+				document.querySelector("#FMCcount").innerHTML="FMC move count: "+countMoves(FMCalg);
+				FMCInv=inverse(FMCalg);
+				document.querySelector("#invFMC").innerHTML="FMC algorithm inverse: "+FMCInv;
 
-			FMCCube.innerHTML="FMC Scramble: <br>";
-			SRVisualizer.cubePNG(FMCCube,{algorithm:"x2 "+FMCalg,width:cubeWidth,height:cubeHeight});
-			FMCInverse.innerHTML="FMC Inverse: <br>";
-			SRVisualizer.cubePNG(FMCInverse,{algorithm:"x2 "+FMCInv,width:cubeWidth,height:cubeHeight});
+				FMCCube.innerHTML="FMC Scramble: <br>";
+				SRVisualizer.cubePNG(FMCCube,{algorithm:"x2 "+FMCalg,width:cubeWidth,height:cubeHeight});
+				FMCInverse.innerHTML="FMC Inverse: <br>";
+				SRVisualizer.cubePNG(FMCInverse,{algorithm:"x2 "+FMCInv,width:cubeWidth,height:cubeHeight});
+			}else{
+				document.getElementById("inverse").innerHTML="Inverse: ";
+				document.getElementById("count").innerHTML="Move count: 0";
+
+				normalCube.innerHTML="Normal Scramble: <br>";
+				SRVisualizer.cubePNG(normalCube,{algorithm:"x2",width:cubeWidth,height:cubeHeight});
+				inverseCube.innerHTML="Inverse Scramble: <br>";
+				SRVisualizer.cubePNG(inverseCube,{algorithm:"x2",width:cubeWidth,height:cubeHeight});
+
+				document.querySelector("#algFMC").innerHTML="Algorithm for FMC (W/O rotations, wide and slice moves): ";
+				document.querySelector("#FMCcount").innerHTML="FMC move count: 0";
+				document.querySelector("#invFMC").innerHTML="FMC algorithm inverse: ";
+
+				FMCCube.innerHTML="FMC Scramble: <br>";
+				SRVisualizer.cubePNG(FMCCube,{algorithm:"x2",width:cubeWidth,height:cubeHeight});
+				FMCInverse.innerHTML="FMC Inverse: <br>";
+				SRVisualizer.cubePNG(FMCInverse,{algorithm:"x2",width:cubeWidth,height:cubeHeight});
 			}
 		}
 
@@ -440,3 +457,4 @@
 </body>
 
 </html>
+
